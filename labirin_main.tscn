@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://glgnrkun6vqb"]
+
+[ext_resource type="Script" uid="uid://dxcrj8ks05ij2" path="res://labirin_main.gd" id="1_i7iss"]
+[ext_resource type="Script" uid="uid://d3d8cml261pw1" path="res://dots_drawer.gd" id="1_opb2n"]
+[ext_resource type="Script" uid="uid://c1s4ma0pqknva" path="res://player.gd" id="1_xv5sd"]
+[ext_resource type="Script" uid="uid://qbwp4c4ijjhr" path="res://label_timer.gd" id="2_amxfn"]
+[ext_resource type="Texture2D" uid="uid://bvcalb4e0cctt" path="res://Buku Tutorial.png" id="3_0lye4"]
+[ext_resource type="Script" uid="uid://delgx6t21427h" path="res://maze_manager.gd" id="3_mkmpi"]
+[ext_resource type="Texture2D" uid="uid://bnfa30ojf7lq8" path="res://Buku Tutorial (1).png" id="4_c60rp"]
+[ext_resource type="Script" uid="uid://bhook4pujk40p" path="res://lives_ui.gd" id="5_5btj5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2yeld"]
+texture = ExtResource("3_0lye4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_acopp"]
+texture = ExtResource("4_c60rp")
+
+[node name="Labirin_main" type="Node2D" unique_id=1637121673]
+script = ExtResource("1_i7iss")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1149095141]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.4117647, 0.84705883, 0.84705883, 1)
+
+[node name="LabelTimer" type="Label" parent="Background" unique_id=442617391]
+layout_mode = 0
+offset_left = 1510.0
+offset_top = 40.0
+offset_right = 1890.0
+offset_bottom = 232.0
+theme_override_font_sizes/font_size = 140
+text = "00:10"
+script = ExtResource("2_amxfn")
+
+[node name="Timer" type="Timer" parent="Background/LabelTimer" unique_id=682499692]
+
+[node name="Button" type="Button" parent="Background/LabelTimer" unique_id=823614275]
+texture_filter = 1
+layout_mode = 0
+offset_left = -1370.0
+offset_top = 657.0
+offset_right = -1183.0
+offset_bottom = 844.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_2yeld")
+theme_override_styles/hover = SubResource("StyleBoxTexture_acopp")
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Background" unique_id=655572485]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -500.0
+offset_right = 500.0
+offset_bottom = 500.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+border_color = Color(1, 1, 1, 1)
+border_width = 8.0
+editor_only = false
+
+[node name="StatusLabel" type="Label" parent="Background" unique_id=1878732567]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 540.0
+offset_right = 346.0
+offset_bottom = 607.0
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MazeManager" type="Node2D" parent="." unique_id=862244571]
+script = ExtResource("3_mkmpi")
+
+[node name="Player" type="Node2D" parent="." unique_id=86509295]
+script = ExtResource("1_xv5sd")
+
+[node name="DotsDrawer" type="Node2D" parent="." unique_id=1990937884]
+script = ExtResource("1_opb2n")
+
+[node name="playButton" type="Button" parent="." unique_id=189605905]
+offset_left = 81.0
+offset_top = 919.0
+offset_right = 394.0
+offset_bottom = 1020.0
+theme_override_font_sizes/font_size = 50
+text = "MULAI"
+
+[node name="LivesUI" type="Node2D" parent="." unique_id=393221745]
+script = ExtResource("5_5btj5")
+
+[node name="ColorRect" type="ColorRect" parent="LivesUI" unique_id=894697808]
+visible = false
+offset_left = 30.0
+offset_top = 70.0
+offset_right = 130.0
+offset_bottom = 170.0
+
+[connection signal="timeout" from="Background/LabelTimer/Timer" to="." method="_on_timer_timeout"]

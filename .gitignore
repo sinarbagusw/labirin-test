@@ -1,0 +1,12 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Build & Exported binaries
+*.apk
+*.aab
+*.exe
+*.pck
+*.zip
+*.html
+*.wasm
