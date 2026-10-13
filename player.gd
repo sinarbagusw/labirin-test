@@ -19,7 +19,8 @@ const MAX_LIVES := 3
 
 var is_active := false
 var current_lives := MAX_LIVES
-var sum_target = 0
+var sum_target_a = false
+var sum_target_b = false
 
 func _ready() -> void:
 	hide() # Sembunyikan visual player saat pertama kali load
@@ -58,8 +59,9 @@ func update_player_position() -> void:
 	position = Vector2(pos_x, pos_y)
 	queue_redraw() # Refresh gambar jika ada perubahan
 
+var is_moving := false
 func move(dir: Vector2i) -> void:
-	if not is_active:
+	if not is_active or is_moving:
 		return
 	var target_pos = grid_pos + dir
 	if target_pos.x >= 0 and target_pos.x < GRID_SIZE and target_pos.y >= 0 and target_pos.y < GRID_SIZE:
@@ -67,14 +69,33 @@ func move(dir: Vector2i) -> void:
 			handle_wall_collision()
 		else:
 			grid_pos = target_pos
-			update_player_position()
-			if grid_pos == GOAL_POS2 and sum_target < 1:
-				sum_target += 1
-				print("point=", sum_target)
-			
-			elif grid_pos == GOAL_POS1 and sum_target >= 1:
-				reset_position_player()
-				trigger_victory()
+			# update_player_position()
+			animate_movement()
+			addpoint()
+
+func animate_movement() -> void:
+	is_moving = true
+	var offset = Vector2(GRID_SIZE - 1, GRID_SIZE - 1) * CELL_SIZE / 2.0
+	var target_position = Vector2(
+			(BOARD_CENTER.x - offset.x) + (grid_pos.x * CELL_SIZE), 
+			(BOARD_CENTER.y - offset.y) + (grid_pos.y * CELL_SIZE)
+		)
+
+	var tween = create_tween()
+	tween.tween_property(self, "position", target_position, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.finished.connect(func(): is_moving = false)
+
+func addpoint() -> void:
+	if grid_pos == GOAL_POS1:
+		sum_target_a = true
+		print("Kamu berhasil mencapai titik finish! Total titik finish yang dicapai: ", sum_target_a)
+	if grid_pos == GOAL_POS2:
+		sum_target_b = true
+		print("Kamu berhasil mencapai titik finish! Total titik finish yang dicapai: ", sum_target_b)
+	if sum_target_a == true and sum_target_b == true:
+		trigger_victory()
+		sum_target_a = false
+		sum_target_b = false
 				
 
 
